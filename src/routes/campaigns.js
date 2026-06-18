@@ -29,7 +29,7 @@ router.post('/campaigns', requireApiKey, (req, res) => {
 
 // One-click demo seed: creates a campaign with enough pledges, a stretch goal,
 // a campaign update, and comments so that every trigger type has data to return.
-router.post('/demo/seed', requireApiKey, (req, res) => {
+const seedHandler = (req, res) => {
   const db = getDb();
   const accountId = req.account.id;
 
@@ -73,6 +73,10 @@ router.post('/demo/seed', requireApiKey, (req, res) => {
   }
 
   res.status(201).json({ seeded: true, campaign_id: campId });
-});
+};
+
+// Allow both GET (easy from a browser with ?apiKey=...) and POST.
+router.get('/demo/seed', requireApiKey, seedHandler);
+router.post('/demo/seed', requireApiKey, seedHandler);
 
 module.exports = router;
